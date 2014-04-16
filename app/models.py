@@ -28,7 +28,7 @@ class User(db.Model):
 
 	def __repr__(self):
 		return '<User %r>'% (self.nickname)
-
+		
 class Post(db.Model):
 	"model for Posts table"
 	id = db.Column(db.Integer, primary_key = True)

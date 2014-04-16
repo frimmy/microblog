@@ -7,44 +7,24 @@ from models import User, ROLE_USER, ROLE_ADMIN
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
-	user = {'nickname': 'Miguel'} # fake user
+	user = g.user
 	posts = [ # fake array of posts
 		{
 			'author': { 'nickname': 'John'},
-			'body': 'Beautiful day in Portland!',
-			'comments':
-				[
-					{
-						'username': 'daylegaylord',
-						'comment':'This movie was badass!'
-					},
-					{
-					'username':'badassking1010',
-					'comment':'This movie was terrible!'
-					}
-				]
+			'body': 'Beautiful day in Portland!'
 		},
 		{
 			'author': {'nickname': 'Susan'},
-			'body': 'The Avengers movie was so cool!',
-			'comments':
-				[
-					{
-						'username': 'daylegaylord',
-						'comment':'This movie was badass!'
-					},
-					{
-					'username':'badassking1010',
-					'comment':'This movie was terrible!'
-					}
-				]
+			'body': 'The Avengers movie was so cool!'
 		}
 	]
+
 	return render_template('index.html',
-		user=user,
-		title='Home',
-		posts=posts)
+		title = 'Home',
+		user = user,
+		posts = posts)
 
 @app.route('/login', methods = ['GET', 'POST'])
 @oid.loginhandler
@@ -65,12 +45,12 @@ def login():
 
 @oid.after_login
 def after_login(resp):
-	if resp.email is none or resp.email == "":
+	if resp.email is None or resp.email == "":
 		flash('Invalid login. Please try again.')
 	
 		return redirect(url_for('login'))
 	
-	user = User.query.filter_by(email = resp.email, role = ROLE_USER)
+	user = User.query.filter_by(email = resp.email).first()
 	
 	if user is None:
 		nickname = resp.nickname
@@ -91,6 +71,10 @@ def after_login(resp):
 	login_user(user, remember=remember_me)
 	
 	return redirect(request.args.get('next') or url_for('index'))
+
+@app.before_request
+def before_request():
+	g.user = current_user
 
 @lm.user_loader
 def load_user(id):
