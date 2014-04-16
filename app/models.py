@@ -13,6 +13,19 @@ class User(db.Model):
 	# relationships
 	posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
 
+	# functions of user class for Flask-Login play
+	def is_authenticated(self):
+		return True
+
+	def is_active(self):
+		return True
+
+	def is_anonymous(self):
+		return False
+
+	def get_id(self):
+		return unicode(self.id)
+
 	def __repr__(self):
 		return '<User %r>'% (self.nickname)
 
