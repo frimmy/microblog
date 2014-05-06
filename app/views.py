@@ -1,11 +1,11 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, make_response, jsonify, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
-from forms import LoginForm
+from forms import LoginForm, EditForm
 from models import User, ROLE_USER, ROLE_ADMIN
 from urllib2 import urlopen
 from json import loads
-from crossdomain import crossdomain
+from datetime import datetime
 
 
 @app.route('/')
@@ -46,6 +46,22 @@ def login():
 		form = form,
 		providers = app.config['OPENID_PROVIDERS'])
 
+@app.route('/edit', methods = ['GET','POST'])
+@login_required
+def edit():
+	form = EditForm()
+	if form.validate_on_submit():
+		g.user.nickname = form.nickname.data
+		g.user.about_me = form.about_me.data
+		db.session.add(g.user)
+		db.session.commit()
+		flash('Your changes have been saved.')
+		return redirect(url_for('user',nickname=g.user.nickname))
+	else:
+		form.nickname.data = g.user.nickname
+		form.about_me.data = g.user.about_me
+	return render_template('edit.html', form=form)
+
 @oid.after_login
 def after_login(resp):
 	if resp.email is None or resp.email == "":
@@ -83,6 +99,10 @@ def logout():
 @app.before_request
 def before_request():
 	g.user = current_user
+	if g.user.is_authenticated():
+		g.user.last_seen = datetime.utcnow()
+		db.session.add(g.user)
+		db.session.commit()
 
 @lm.user_loader
 def load_user(id):
@@ -103,3 +123,5 @@ def user(nickname):
 	return render_template('user.html',
 		user=user,
 		posts = posts)
+
+

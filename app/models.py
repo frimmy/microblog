@@ -7,13 +7,13 @@ ROLE_ADMIN = 1
 class User(db.Model):
 	"""user model"""
 	id = db.Column(db.Integer, primary_key = True)
-	nickname = db.Column(db.String(64), index = True, unique = True)
+	nickname = db.Column(db.String(64), index = True)
 	email = db.Column(db.String(120), index = True, unique = True)
 	role = db.Column(db.Integer, default = ROLE_USER)
-	
 	# relationships
 	posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
-
+	about_me = db.Column(db.String(140))
+	last_seen = db.Column(db.DateTime)
 	# functions of user class for Flask-Login play
 	def is_authenticated(self):
 		return True
