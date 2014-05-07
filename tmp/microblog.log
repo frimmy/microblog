@@ -1,0 +1,81 @@
+2014-05-07 03:39:47,332 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-05-07 03:40:09,446 ERROR: Exception on /edit [GET] [in C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py:1306]
+Traceback (most recent call last):
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1687, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1360, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1358, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1344, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask_login.py", line 758, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\app\views.py", line 54, in edit
+    form = EditForm(g.user.nickname)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 178, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask_wtf\form.py", line 77, in __init__
+    super(Form, self).__init__(formdata, obj, prefix, csrf_context=csrf_context, *args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\ext\csrf\form.py", line 21, in __init__
+    super(SecureForm, self).__init__(formdata, obj, prefix, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 233, in __init__
+    self.process(formdata, obj, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 102, in process
+    raise TypeError("formdata should be a multidict-type wrapper that supports the 'getlist' method")
+TypeError: formdata should be a multidict-type wrapper that supports the 'getlist' method
+2014-05-07 03:40:14,710 ERROR: Exception on /edit [GET] [in C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py:1306]
+Traceback (most recent call last):
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1687, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1360, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1358, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1344, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask_login.py", line 758, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\app\views.py", line 54, in edit
+    form = EditForm(g.user.nickname)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 178, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask_wtf\form.py", line 77, in __init__
+    super(Form, self).__init__(formdata, obj, prefix, csrf_context=csrf_context, *args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\ext\csrf\form.py", line 21, in __init__
+    super(SecureForm, self).__init__(formdata, obj, prefix, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 233, in __init__
+    self.process(formdata, obj, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 102, in process
+    raise TypeError("formdata should be a multidict-type wrapper that supports the 'getlist' method")
+TypeError: formdata should be a multidict-type wrapper that supports the 'getlist' method
+2014-05-07 03:43:29,375 ERROR: Exception on /edit [GET] [in C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py:1306]
+Traceback (most recent call last):
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1687, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1360, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1358, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask\app.py", line 1344, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask_login.py", line 758, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\app\views.py", line 54, in edit
+    form = EditForm(g.user.nickname)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 178, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\flask_wtf\form.py", line 77, in __init__
+    super(Form, self).__init__(formdata, obj, prefix, csrf_context=csrf_context, *args, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\ext\csrf\form.py", line 21, in __init__
+    super(SecureForm, self).__init__(formdata, obj, prefix, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 233, in __init__
+    self.process(formdata, obj, **kwargs)
+  File "C:\Users\afrimpong\PIP_Projects\microblog\flask\lib\site-packages\wtforms\form.py", line 102, in process
+    raise TypeError("formdata should be a multidict-type wrapper that supports the 'getlist' method")
+TypeError: formdata should be a multidict-type wrapper that supports the 'getlist' method
+2014-05-07 03:50:37,845 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-05-07 03:50:39,595 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-05-07 03:52:18,915 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-05-07 03:52:39,000 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-05-07 03:52:41,615 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
