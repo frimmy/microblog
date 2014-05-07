@@ -18,8 +18,6 @@ class User(db.Model):
     last_seen = db.Column(db.DateTime)
     # functions of user class for Flask-Login play
 
-
-
     def is_authenticated(self):
         return True
 
@@ -39,19 +37,20 @@ class User(db.Model):
         return ('http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() +
                 '?d=mm&s=' + str(size))
 
-   	# handle auto-creation of unique nicknames to avoid name collision
-	@staticmethod
-	def make_unique_nickname(nickname):
-		if User.query.filter_by(nickname = nickname).first() == None:
-			return nickname
-		version = 2
-		while True:
-			new_nickname = nickname + str(version)
-			if User.query.filter_by(nickname = new_nickname).first() == None:
-				break
-			version += 1
-		return new_nickname
-		
+    # handle auto-creation of unique nicknames to avoid name collision
+    @staticmethod
+    def make_unique_nickname(nickname):
+        if User.query.filter_by(nickname=nickname).first() == None:
+            return nickname
+        version = 2
+        while True:
+            new_nickname = nickname + str(version)
+            if User.query.filter_by(nickname=new_nickname).first() == None:
+                break
+            version += 1
+        return new_nickname
+
+
 class Post(db.Model):
 
     "model for Posts table"
