@@ -82,8 +82,6 @@ def user(nickname):
                            posts=posts)
 
 
-
-
 @app.route('/logout')
 def logout():
     logout_user()
@@ -111,6 +109,7 @@ def before_request():
         db.session.add(g.user)
         db.session.commit()
 
+
 @oid.after_login
 def after_login(resp):
     if resp.email is None or resp.email == "":
@@ -126,9 +125,12 @@ def after_login(resp):
         if nickname is None or nickname == "":
             nickname = resp.email.split('@')[0]
         nickname = User.make_unique_nickname(nickname)
-        
+
         user = User(nickname=nickname, email=resp.email, role=ROLE_USER)
         db.session.add(user)
+        db.session.commit()
+        # make the user follow him/herself
+        db.session.add(user.follow(user))
         db.session.commit()
 
     remember_me = False
@@ -141,6 +143,57 @@ def after_login(resp):
 
     return redirect(url_for('user', nickname=user.nickname))
 
+
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+@app.route('/follow/<nickname>')
+@login_required
+def follow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user == None:
+        flash('User {0} not found.'.format(nickname))
+        return redirect(url_for('index'))
+    
+    if user == g.user:
+        flash('You can\'t follow yourself!')
+        return redirect(url_for('user', nickname=nickname))
+
+    u = g.user.follow(user)
+    
+    if u is None:
+        flash('Cannot follow {0}'.format(nickname))
+        return redirect(url_for('user', nickname=nickname))
+    # user is able to add another user
+    db.session.add(u)
+    db.session.commit()
+    flash("You're following {0}!".format(nickname))
+    return redirect(url_for('user', nickname=nickname))
+
+@app.route('/unfollow/<nickname>')
+@login_required
+def unfollow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    # check if user exists
+    if user==None:
+        flash("User {0} not found.".format(nickname))
+        return redirect(url_for('index'))
+    # check if user is attempting to unfollow themself
+    if user == g.user:
+        flash("You can't unfollow yourself!")
+        return redirect(url_for('index'))
+    # set object u to add to db.session
+    u = g.user.unfollow(user)
+    # check if user is able to unfollow another user
+    if u == None:
+        flash("Can't unfollow {0}.".format(nickname))
+        return redirect(url_for('user', nickname=nickname))
+    # add unfollow and commit to db.session
+    db.session.add(u)
+    db.session.commit()
+    flash("You have stopped following {0}".format(nickname))
+    return redirect(url_for('user', nickname=nickname))
+
+
