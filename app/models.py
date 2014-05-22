@@ -21,6 +21,10 @@ class User(db.Model):
     role = db.Column(db.SmallInteger, default=ROLE_USER)
     # relationships
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    
+    # similar to posts, use relationships
+    projects = db.relationship('Projects', backref='author', lazy='dynamic')
+
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
     # functions of user class for Flask-Login play
@@ -32,6 +36,7 @@ class User(db.Model):
                                backref = db.backref(
                                    'followers', lazy='dynamic'),
                                lazy = 'dynamic')
+
 
     def is_authenticated(self):
         return True
@@ -88,7 +93,7 @@ class User(db.Model):
 
 class Post(db.Model):
 
-    "model for Posts table"
+    """model for Posts table"""
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
@@ -97,3 +102,34 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % (self.body)
+
+# TODO: user projects, skills
+class Projects(db.Model):
+    
+    """
+    model for Project table
+    has a 1 to many relationship similar to Posts.
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(30))
+    description = db.Column(db.String(140))
+    git_hub_link = db.Column(db.String(255))
+    demo_link = db.Column(db.String(255))
+    
+    # best to use a path to the imgs 
+    # ex: uploads/my_project_sample.png       
+    screen_shot = db.Column(db.String(255))
+    
+    def __repr__(self):
+        return '<Project %r>' % (self.title)
+
+
+# class Skills(db.Model)
+#   """
+#   model for Skills table
+#   has a one-to-many relationship similar to Posts.
+#   """
+#   id = db.Column(db.Integer, primary_key=True)
+#   name = db.Column(db.String(30))
+

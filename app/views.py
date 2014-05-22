@@ -82,6 +82,19 @@ def user(nickname):
                            posts=posts)
 
 
+@app.route('/user/<nickname>/portfolio')
+@login_required
+def portfolio(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user == None:
+        flash('User ' + nickname + ' not found')
+        return redirect(url_for('index'))
+
+    return render_template('portfolio.html', 
+        user=user,
+        portfolios=user.projects)
+
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -156,13 +169,13 @@ def follow(nickname):
     if user == None:
         flash('User {0} not found.'.format(nickname))
         return redirect(url_for('index'))
-    
+
     if user == g.user:
         flash('You can\'t follow yourself!')
         return redirect(url_for('user', nickname=nickname))
 
     u = g.user.follow(user)
-    
+
     if u is None:
         flash('Cannot follow {0}'.format(nickname))
         return redirect(url_for('user', nickname=nickname))
@@ -172,12 +185,13 @@ def follow(nickname):
     flash("You're following {0}!".format(nickname))
     return redirect(url_for('user', nickname=nickname))
 
+
 @app.route('/unfollow/<nickname>')
 @login_required
 def unfollow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     # check if user exists
-    if user==None:
+    if user == None:
         flash("User {0} not found.".format(nickname))
         return redirect(url_for('index'))
     # check if user is attempting to unfollow themself
@@ -195,5 +209,3 @@ def unfollow(nickname):
     db.session.commit()
     flash("You have stopped following {0}".format(nickname))
     return redirect(url_for('user', nickname=nickname))
-
-
