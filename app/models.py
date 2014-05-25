@@ -104,6 +104,7 @@ class Post(db.Model):
         return '<Post %r>' % (self.body)
 
 # TODO: user projects, skills
+# TODO: 
 class Projects(db.Model):
     
     """

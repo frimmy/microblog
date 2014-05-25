@@ -78,7 +78,7 @@ class TestCase(unittest.TestCase):
         u3 = User(nickname = 'mary', email = 'mary@example.com')
         u4 = User(nickname = 'david', email = 'david@example.com')
         for i in [u1, u2, u3, u4]:
-            session.add(i)
+            db.session.add(i)
         # make four posts
         utcnow = datetime.utcnow()
         p1 = Post(body="post from john", author=u1, timestamp=utcnow + timedelta(seconds=1))
@@ -87,7 +87,7 @@ class TestCase(unittest.TestCase):
         p4 = Post(body="post from david", author=u4, timestamp=utcnow + timedelta(seconds=4))
 
         for i in [p1, p2, p3, p4]:
-            session.add(i)
+            db.session.add(i)
         # commit users and posts to temporary db
         db.session.commit()
 
