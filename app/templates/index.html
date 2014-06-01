@@ -1,11 +1,38 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
-<h1>Hello, {{user.nickname}}!</h1>
+{% block content %}
+
+<h1>Heyo, {{g.user.nickname}}!</h1>
+<form action="" method="post" name="post">
+	{{form.hidden_tag()}}
+	<table>
+		<tr>
+			<td>
+				Say something:
+			</td>
+			<td>
+				{{ form.post(size = 30, maxlength = 140) }}
+			</td>
+			<td>
+				{% for error in form.errors.post %}
+					<span style="color: red;">[{{error}}]</span><br>
+				{% endfor %}
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="submit" value="Post!">
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+	
 {% for post in posts %}
-<p>{{post.author.nickname}} says <b>{{ post.body }}</b>
-</p>
+	<p>
+		{{post.author.nickname}} says <b>{{ post.body }}</b>
+	</p>
 
-{% for commenter in post.comments %}
-<p class="comments">{{ commenter.username }} commented <b>{{ commenter.comment }}</b>
-</p>
-{% endfor %} {% endfor %} {% endblock %}
+{% endfor %} 
+{% endblock %}
