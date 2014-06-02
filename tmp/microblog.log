@@ -181,3 +181,5 @@ TypeError: formdata should be a multidict-type wrapper that supports the 'getlis
 2014-06-01 22:14:04,973 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
 2014-06-01 22:14:55,154 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
 2014-06-01 22:21:19,374 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-06-02 00:03:59,901 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]
+2014-06-02 00:04:00,371 INFO: microblog startup [in C:\Users\afrimpong\PIP_Projects\microblog\app\__init__.py:33]

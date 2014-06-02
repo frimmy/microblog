@@ -6,6 +6,9 @@
     {% else %}
         <title>Welcome to microblog</title>
     {% endif %}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
     	p.comments {
     		color: blue;
@@ -34,6 +37,8 @@
     {% endif %}
     {% endwith %}
 	{% block content %}{% endblock %}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
 
 </html>
