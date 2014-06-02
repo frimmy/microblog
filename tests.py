@@ -6,7 +6,7 @@ from config import basedir
 from app import app, db
 from app.models import User
 from datetime import datetime, timedelta
-from app.models import User, Post
+from app.models import User, Post, Project
 
 
 class TestCase(unittest.TestCase):
@@ -73,18 +73,22 @@ class TestCase(unittest.TestCase):
 
     def test_follow_posts(self):
         # make four users
-        u1 = User(nickname = 'john', email = 'john@example.com')
-        u2 = User(nickname = 'susan', email = 'susan@example.com')
-        u3 = User(nickname = 'mary', email = 'mary@example.com')
-        u4 = User(nickname = 'david', email = 'david@example.com')
+        u1 = User(nickname='john', email='john@example.com')
+        u2 = User(nickname='susan', email='susan@example.com')
+        u3 = User(nickname='mary', email='mary@example.com')
+        u4 = User(nickname='david', email='david@example.com')
         for i in [u1, u2, u3, u4]:
             db.session.add(i)
         # make four posts
         utcnow = datetime.utcnow()
-        p1 = Post(body="post from john", author=u1, timestamp=utcnow + timedelta(seconds=1))
-        p2 = Post(body="post from susan", author=u2, timestamp=utcnow + timedelta(seconds=2))
-        p3 = Post(body="post from mary", author=u3, timestamp=utcnow + timedelta(seconds=3))
-        p4 = Post(body="post from david", author=u4, timestamp=utcnow + timedelta(seconds=4))
+        p1 = Post(body="post from john", author=u1,
+                  timestamp=utcnow + timedelta(seconds=1))
+        p2 = Post(body="post from susan", author=u2,
+                  timestamp=utcnow + timedelta(seconds=2))
+        p3 = Post(body="post from mary", author=u3,
+                  timestamp=utcnow + timedelta(seconds=3))
+        p4 = Post(body="post from david", author=u4,
+                  timestamp=utcnow + timedelta(seconds=4))
 
         for i in [p1, p2, p3, p4]:
             db.session.add(i)
@@ -92,28 +96,28 @@ class TestCase(unittest.TestCase):
         db.session.commit()
 
         # setup followers in the db
-       
+
         # followers for u1(john)
-        for i in [u1, u2, u4]: # john follows himself, susan, and david
+        for i in [u1, u2, u4]:  # john follows himself, susan, and david
             u1.follow(i)
-       
+
         # followers for u2(susan)
-        for i in [u2, u3]: # susan follows herself, mary
+        for i in [u2, u3]:  # susan follows herself, mary
             u2.follow(i)
 
         # followers for u3(mary)
-        for i in [u3, u4]: # mary follows herself, david
+        for i in [u3, u4]:  # mary follows herself, david
             u3.follow(i)
 
         # followers for u4(david)
-        u4.follow(u4) # david follows himself
+        u4.follow(u4)  # david follows himself
 
         for i in [u1, u2, u3, u4]:
-            db.session.add(i) # add follows to session for commit
+            db.session.add(i)  # add follows to session for commit
 
         db.session.commit()
         # check the followed posts of each user
-        
+
         f1 = u1.followed_posts().all()
         f2 = u2.followed_posts().all()
         f3 = u3.followed_posts().all()
@@ -127,6 +131,32 @@ class TestCase(unittest.TestCase):
         self.assertEqual(f2, [p3, p2])
         self.assertEqual(f3, [p4, p3])
         self.assertEqual(f4, [p4])
+
+    def test_projects(self):
+        # mock user
+        u1 = User(nickname='john', email='john@example.com')
+        db.session.add(u1)
+
+        # mock portfolio object
+        p1 = Project(
+            title='Find Me Pizza',
+            description="Yelp/Google Maps API w/ Ouath \
+            2.0 to find business around with search query of \"pizza\"",
+            git_hub_link="https://github.com/frimmy/findmepizza",
+            demo_link="http://frimmy.github.io/findmepizza/",
+            author=u1)
+        
+        db.session.add(p1)
+        db.session.commit()
+
+        post1 = u1.projects.first()
+
+        self.assertEqual(post1.title, p1.title)
+        self.assertEqual(post1.description, p1.description)
+        self.assertEqual(post1.git_hub_link, p1.git_hub_link)
+        self.assertEqual(post1.demo_link, p1.demo_link)
+        self.assertEqual(post1.author, p1.author)
+
 
 
 

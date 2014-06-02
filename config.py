@@ -16,6 +16,7 @@ OPENID_PROVIDERS = [
 	dict(name='MyOpenID', url='https://www.myopenid.com')
 ]
 
+POSTS_PER_PAGE = 3
 # mail server settings
 MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 465

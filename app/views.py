@@ -6,12 +6,13 @@ from models import User, ROLE_USER, ROLE_ADMIN, Post
 from urllib2 import urlopen
 from json import loads
 from datetime import datetime
-
+from config import POSTS_PER_PAGE
 
 @app.route('/', methods= ['GET', 'POST'])  # index view, default when going to
 @app.route('/index', methods= ['GET', 'POST'])
+@app.route('/index/<int:page>', methods=['GET', 'POST'])
 @login_required
-def index():
+def index(page=1):
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body= form.post.data, timestamp = datetime.utcnow(), author = g.user)
@@ -20,7 +21,7 @@ def index():
         flash("Your post is now live!")
         return redirect(url_for('index'))
     
-    posts = g.user.followed_posts().all()
+    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False).items
 
     return render_template('index.html',
                            title='Home',
@@ -71,10 +72,8 @@ def user(nickname):
         flash('User ' + nickname + ' not found')
         return redirect(url_for('index'))
 
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    posts = user.followed_posts().all()
+
     return render_template('user.html',
                            user=user,
                            posts=posts)
@@ -90,7 +89,7 @@ def portfolio(nickname):
 
     return render_template('portfolio.html', 
         user=user,
-        portfolios=user.projects)
+        portfolios=user.project)
 
 
 @app.route('/logout')

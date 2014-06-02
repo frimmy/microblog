@@ -23,7 +23,7 @@ class User(db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     
     # similar to posts, use relationships
-    projects = db.relationship('Projects', backref='author', lazy='dynamic')
+    projects = db.relationship('Project', backref='author', lazy='dynamic')
 
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
@@ -105,19 +105,20 @@ class Post(db.Model):
 
 # TODO: user projects, skills
 # TODO: 
-class Projects(db.Model):
+class Project(db.Model):
     
     """
-    model for Project table
+    model for Projects table
     has a 1 to many relationship similar to Posts.
     """
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(30))
     description = db.Column(db.String(140))
     git_hub_link = db.Column(db.String(255))
     demo_link = db.Column(db.String(255))
     
+    # relationship to User
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # best to use a path to the imgs 
     # ex: uploads/my_project_sample.png       
     screen_shot = db.Column(db.String(255))
