@@ -17,6 +17,7 @@ OPENID_PROVIDERS = [
 ]
 
 POSTS_PER_PAGE = 3
+
 # mail server settings
 MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 465

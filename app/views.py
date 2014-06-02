@@ -8,6 +8,7 @@ from json import loads
 from datetime import datetime
 from config import POSTS_PER_PAGE
 
+# index(home) view 
 @app.route('/', methods= ['GET', 'POST'])  # index view, default when going to
 @app.route('/index', methods= ['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
@@ -21,14 +22,14 @@ def index(page=1):
         flash("Your post is now live!")
         return redirect(url_for('index'))
     
-    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False).items
+    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
 
     return render_template('index.html',
                            title='Home',
                            form = form,
                            posts=posts)
 
-
+# view for logging in
 @app.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
@@ -46,7 +47,7 @@ def login():
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
 
-
+# view logic for editing user profile
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
@@ -63,22 +64,23 @@ def edit():
         form.about_me.data = g.user.about_me
     return render_template('edit.html', form=form)
 
-
+# view for user profile pages
 @app.route('/user/<nickname>')
+@app.route('/user/<nickname>/<int:page>')
 @login_required
-def user(nickname):
+def user(nickname, page = 1):
     user = User.query.filter_by(nickname=nickname).first()
     if user == None:
         flash('User ' + nickname + ' not found')
         return redirect(url_for('index'))
 
-    posts = user.followed_posts().all()
+    posts = user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
 
     return render_template('user.html',
                            user=user,
                            posts=posts)
 
-
+# view for user portfolios
 @app.route('/user/<nickname>/portfolio')
 @login_required
 def portfolio(nickname):
@@ -86,12 +88,14 @@ def portfolio(nickname):
     if user == None:
         flash('User ' + nickname + ' not found')
         return redirect(url_for('index'))
-
+    elif len(user.projects.all()) < 1:
+        flash('Yo ' + nickname + '! You don\'t have any projects!')
+        return redirect(url_for('index'))
     return render_template('portfolio.html', 
         user=user,
-        portfolios=user.project)
+        portfolios=user.projects)
 
-
+# view for logging out
 @app.route('/logout')
 def logout():
     logout_user()
@@ -99,18 +103,18 @@ def logout():
 
 # Views for Error Handlers
 
-
+# redirects to 404 on not founds
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
 
-
+# redirects to 500 on server errors
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 404
 
-
+# before everyrequest, assign the g.user object as current_user
 @app.before_request
 def before_request():
     g.user = current_user
@@ -119,7 +123,7 @@ def before_request():
         db.session.add(g.user)
         db.session.commit()
 
-
+# oid after login, assign user an email after logging in
 @oid.after_login
 def after_login(resp):
     if resp.email is None or resp.email == "":
@@ -153,7 +157,7 @@ def after_login(resp):
 
     return redirect(url_for('user', nickname=user.nickname))
 
-
+# queue up a user 
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
