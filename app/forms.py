@@ -1,6 +1,8 @@
 from flask.ext.wtf import Form
+from flask.ext.wtf.file import FileField
 from wtforms import TextField, BooleanField, TextAreaField
-from wtforms.validators import Required, Length
+from wtforms.validators import Required, Length, url
+from wtforms.fields.html5 import URLField
 from app.models import User
 
 
@@ -35,3 +37,20 @@ class EditForm(Form):
 
 class PostForm(Form):
     post = TextField('post', validators=[Required()])
+
+
+class ProjectsForm(Form):
+
+    """
+    This is the docstring for Projects. 
+    Users can add as many projects as they can by providing
+    a title, a description, and links to the project (url/github).
+    TODO: add ability to store image of project
+    """
+    title = TextField('title', validators=[Required()])
+    description = TextAreaField(
+        'description', validators=[Length(min=0, max=140), Required()])
+    git_hub_link = URLField('git_hub_link', validators=[url(), Required()])
+    demo_link = TextField('demo_link', validators=[url(), Required()])
+    # Todo: add validator that checks for broken links
+    

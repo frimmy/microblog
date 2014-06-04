@@ -1,13 +1,73 @@
 {% extends "base.html" %}
 {% block content %}
 	<h3>{{ user.nickname }}</h3>
+	
+<!-- projects listed for a user -->
 	<ul>
 		{% for project in user.projects %}
 			<li>
 				<h4>{{project.title}}</h4>
 				<p>{{project.description}}</p>
+				<a href="{{project.git_hub_link}}">Github</a><br>
+				<a href="{{project.demo_link}}">Demo</a><br>
 			</li>
 		{% endfor %}	
 	</ul>
+	<form action="" method="post" name="post">
+		{{form.hidden_tag()}}
+		Enter project details below:
+		<table>
+			<tr>
+				<td>
+					Title
+				</td>
+				<td>
+					{{form.title}}
+				</td>
+				<td>
+					{% for error in form.errors.title %}
+						<span style="color: red;">[{{error}}]</span><br>
+					{% endfor %}
+				</td>
+			</tr>
+			 <tr>
+	            <td>Description</td>
+	            <td>
+	            	{{form.description(cols=32, rows=4)}}
+	            </td>
+				<td>
+					{% for error in form.errors.description %}
+						<span style="color: red;">[{{error}}]</span><br>
+					{% endfor %}
+				</td>
 
+	        </tr>
+	        <tr>
+	            <td>Github Link:</td>
+	            <td>{{form.git_hub_link}}</td>
+				<td>
+					{% for error in form.errors.git_hub_link %}
+						<span style="color: red;">[{{error}}]</span><br>
+					{% endfor %}
+				</td>
+
+	        </tr>
+	            <td>Demo Link:</td>
+	            <td>{{form.demo_link}}</td>
+				<td>
+					{% for error in form.errors.demo_link %}
+						<span style="color: red;">[{{error}}]</span><br>
+					{% endfor %}
+				</td>
+
+	        </tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" value="Add project!">
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</form>
 {% endblock %}

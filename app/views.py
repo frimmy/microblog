@@ -1,35 +1,40 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, make_response, jsonify, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
-from forms import LoginForm, EditForm, PostForm
-from models import User, ROLE_USER, ROLE_ADMIN, Post
+from forms import LoginForm, EditForm, PostForm, ProjectsForm
+from models import User, ROLE_USER, ROLE_ADMIN, Post, Project
 from urllib2 import urlopen
 from json import loads
 from datetime import datetime
 from config import POSTS_PER_PAGE
 
-# index(home) view 
-@app.route('/', methods= ['GET', 'POST'])  # index view, default when going to
-@app.route('/index', methods= ['GET', 'POST'])
+# index(home) view
+
+
+@app.route('/', methods=['GET', 'POST'])  # index view, default when going to
+@app.route('/index', methods=['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
 @login_required
 def index(page=1):
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body= form.post.data, timestamp = datetime.utcnow(), author = g.user)
+        post = Post(body=form.post.data,
+                    timestamp=datetime.utcnow(), author=g.user)
         db.session.add(post)
         db.session.commit()
         flash("Your post is now live!")
         return redirect(url_for('index'))
-    
+
     posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
 
     return render_template('index.html',
                            title='Home',
-                           form = form,
+                           form=form,
                            posts=posts)
 
 # view for logging in
+
+
 @app.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
@@ -48,6 +53,8 @@ def login():
                            providers=app.config['OPENID_PROVIDERS'])
 
 # view logic for editing user profile
+
+
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
@@ -65,10 +72,12 @@ def edit():
     return render_template('edit.html', form=form)
 
 # view for user profile pages
+
+
 @app.route('/user/<nickname>')
 @app.route('/user/<nickname>/<int:page>')
 @login_required
-def user(nickname, page = 1):
+def user(nickname, page=1):
     user = User.query.filter_by(nickname=nickname).first()
     if user == None:
         flash('User ' + nickname + ' not found')
@@ -81,7 +90,9 @@ def user(nickname, page = 1):
                            posts=posts)
 
 # view for user portfolios
-@app.route('/user/<nickname>/portfolio')
+
+
+@app.route('/user/<nickname>/portfolio', methods=['GET', 'POST'])
 @login_required
 def portfolio(nickname):
     user = User.query.filter_by(nickname=nickname).first()
@@ -90,10 +101,26 @@ def portfolio(nickname):
         return redirect(url_for('index'))
     elif len(user.projects.all()) < 1:
         flash('Yo ' + nickname + '! You don\'t have any projects!')
-        return redirect(url_for('index'))
-    return render_template('portfolio.html', 
-        user=user,
-        portfolios=user.projects)
+
+    form = ProjectsForm()
+
+    if form.validate_on_submit():
+        project = Project(
+            title=form.title.data,
+            description=form.description.data,
+            git_hub_link=form.git_hub_link.data,
+            demo_link=form.demo_link.data,
+            author=g.user)
+        db.session.add(project)
+        db.session.commit()
+        flash('Your project has been added.')
+        return redirect(url_for('portfolio', nickname=g.user.nickname))
+
+    return render_template('portfolio.html',
+                           user=user,
+                           form=form,
+                           projects=user.projects)
+
 
 # view for logging out
 @app.route('/logout')
@@ -104,17 +131,23 @@ def logout():
 # Views for Error Handlers
 
 # redirects to 404 on not founds
+
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
 
 # redirects to 500 on server errors
+
+
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 404
 
 # before everyrequest, assign the g.user object as current_user
+
+
 @app.before_request
 def before_request():
     g.user = current_user
@@ -124,6 +157,8 @@ def before_request():
         db.session.commit()
 
 # oid after login, assign user an email after logging in
+
+
 @oid.after_login
 def after_login(resp):
     if resp.email is None or resp.email == "":
@@ -157,7 +192,9 @@ def after_login(resp):
 
     return redirect(url_for('user', nickname=user.nickname))
 
-# queue up a user 
+# queue up a user
+
+
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
