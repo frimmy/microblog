@@ -51,6 +51,6 @@ class ProjectsForm(Form):
     description = TextAreaField(
         'description', validators=[Length(min=0, max=140), Required()])
     git_hub_link = URLField('git_hub_link', validators=[url(), Required()])
-    demo_link = TextField('demo_link', validators=[url(), Required()])
+    demo_link = URLField('demo_link', validators=[url(), Required()])
     # Todo: add validator that checks for broken links
     

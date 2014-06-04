@@ -3,13 +3,13 @@
 	<h3>{{ user.nickname }}</h3>
 	
 <!-- projects listed for a user -->
-	<ul style="none">
+	<ul>
 		{% for project in user.projects %}
 			<li>
 				<h4>{{project.title}}</h4>
 				<p>{{project.description}}</p>
-				<a href="{{project.git_hub_link}}">Github</a><br>
-				<a href="{{project.demo_link}}">Demo</a><br>
+				<a href="{{project.git_hub_link}}" target="blank">Github</a><br>
+				<a href="{{project.demo_link}}" target="blank">Demo</a><br>
 			</li>
 		{% endfor %}	
 	</ul>
