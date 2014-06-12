@@ -144,6 +144,7 @@ class TestCase(unittest.TestCase):
             2.0 to find business around with search query of \"pizza\"",
             git_hub_link="https://github.com/frimmy/findmepizza",
             demo_link="http://frimmy.github.io/findmepizza/",
+            screen_shot="example_pic.jpeg",
             author=u1)
         
         db.session.add(p1)
@@ -155,6 +156,7 @@ class TestCase(unittest.TestCase):
         self.assertEqual(post1.description, p1.description)
         self.assertEqual(post1.git_hub_link, p1.git_hub_link)
         self.assertEqual(post1.demo_link, p1.demo_link)
+        self.assertEqual(post1.screen_shot, p1.screen_shot)
         self.assertEqual(post1.author, p1.author)
 
 

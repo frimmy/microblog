@@ -1,9 +1,10 @@
 from flask.ext.wtf import Form
 from flask.ext.wtf.file import FileField
 from wtforms import TextField, BooleanField, TextAreaField
-from wtforms.validators import Required, Length, url
+from wtforms.validators import Required, Length, url, Optional
 from wtforms.fields.html5 import URLField
-from app.models import User
+from app.models import User, Project
+from app import app
 
 
 class LoginForm(Form):
@@ -42,15 +43,34 @@ class PostForm(Form):
 class ProjectsForm(Form):
 
     """
-    This is the docstring for Projects. 
+    This is the docstring for Projects.
     Users can add as many projects as they can by providing
     a title, a description, and links to the project (url/github).
     TODO: add ability to store image of project
     """
+
     title = TextField('title', validators=[Required()])
+
     description = TextAreaField(
         'description', validators=[Length(min=0, max=140), Required()])
     git_hub_link = URLField('git_hub_link', validators=[url(), Required()])
     demo_link = URLField('demo_link', validators=[url(), Required()])
     # Todo: add validator that checks for broken links
-    
+    screen_shot = FileField('screen_shot', validators=[Optional()])
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        if not self.allowed_file(self.screen_shot.data.filename):
+            self.screen_shot.errors.append(
+                'This filetype cannot be uploaded. Please upload a jpg, png, gif.')
+            return False
+        return True
+
+    def allowed_file(self, filename):
+        """
+        checks if a file is abled to be uploaded based on filename extension
+        """
+
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1] in app.config['ALLOWED_SCREENSHOT_EXTENSIONS']

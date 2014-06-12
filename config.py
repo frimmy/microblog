@@ -16,6 +16,9 @@ OPENID_PROVIDERS = [
 	dict(name='MyOpenID', url='https://www.myopenid.com')
 ]
 
+UPLOAD_FOLDER = 'uploads/'
+ALLOWED_SCREENSHOT_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 POSTS_PER_PAGE = 3
 
 # mail server settings
@@ -29,3 +32,6 @@ MAIL_PASSWORD = 'Frimmy11!'
 
 # administrator list
 ADMINS = ['adrian.frimpong@gmail.com']
+
+#flask-uploads-config
+UPLOADED_PROJECTSCREENSHOTS_DEST = os.path.join(basedir, 'project_screenshots')

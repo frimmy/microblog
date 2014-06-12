@@ -119,12 +119,15 @@ class Project(db.Model):
     
     # relationship to User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     # best to use a path to the imgs 
     # ex: uploads/my_project_sample.png       
     screen_shot = db.Column(db.String(255))
     
     def __repr__(self):
         return '<Project %r>' % (self.title)
+
+    
 
 
 # class Skills(db.Model)
