@@ -1,90 +1,90 @@
-{% extends "base.html" %}
-{% block content %}
-	<h3>{{ user.nickname }}</h3>
-	
+{% extends "base.html" %} {% block content %}
+<h3>{{ user.nickname }}</h3>
+
 <!-- projects listed for a user -->
-	<ul>
-		{% for project in user.projects %}
-			<div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
+<div class="container-fluid">
+    <div class="row">
+            <ul>
+                {% for project in user.projects %}
+                <div class="thumbnail col-sm-6 col-lg-4">
                     <div class="caption">
                         <h3>{{project.title}}</h3>
                         <p>{{project.description}}</p>
                         <p>
-                        	<a href="{{project.git_hub_link}}" target="_blank" class="btn btn-primary" role="button">Github</a>
-                        	<a href="{{project.demo_link}}" target="_blank" class="btn btn-default" role="button">Demo</a>
-                        	<img src="{{url_for('static',filename=project.screen_shot)}}" width="200" alt="">
+                            <a href="{{project.git_hub_link}}" target="_blank" class="btn btn-primary" role="button">Github</a>
+                            <a href="{{project.demo_link}}" target="_blank" class="btn btn-default" role="button">Demo</a>
+                            <img src="{{url_for('static',filename=project.screen_shot)}}" width="200" alt="">
                         </p>
                     </div>
                 </div>
-            </div>
-		{% endfor %}	
-	</ul>
-	<form action="" method="post" name="post" enctype="multipart/form-data">
-		{{form.hidden_tag()}}
-		Enter project details below:
-		<table>
-			<tr>
-				<td>
-					Title
-				</td>
-				<td>
-					{{form.title}}
-				</td>
-				<td>
-					{% for error in form.errors.title %}
-						<span style="color: red;">[{{error}}]</span><br>
-					{% endfor %}
-				</td>
-			</tr>
-			 <tr>
-	            <td>Description</td>
-	            <td>
-	            	{{form.description(cols=32, rows=4)}}
-	            </td>
-				<td>
-					{% for error in form.errors.description %}
-						<span style="color: red;">[{{error}}]</span><br>
-					{% endfor %}
-				</td>
+                {% endfor %}
+            </ul>
+    </div>
+</div>
+<form action="" method="post" name="post" enctype="multipart/form-data">
+    {{form.hidden_tag()}} Enter project details below:
+    <table>
+        <tr>
+            <td>
+                Title
+            </td>
+            <td>
+                {{form.title}}
+            </td>
+            <td>
+                {% for error in form.errors.title %}
+                <span style="color: red;">[{{error}}]</span>
+                <br>{% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>
+                {{form.description(cols=32, rows=4)}}
+            </td>
+            <td>
+                {% for error in form.errors.description %}
+                <span style="color: red;">[{{error}}]</span>
+                <br>{% endfor %}
+            </td>
 
-	        </tr>
-	        <tr>
-	            <td>Github Link:</td>
-	            <td>{{form.git_hub_link}}</td>
-				<td>
-					{% for error in form.errors.git_hub_link %}
-						<span style="color: red;">[{{error}}]</span><br>
-					{% endfor %}
-				</td>
+        </tr>
+        <tr>
+            <td>Github Link:</td>
+            <td>{{form.git_hub_link}}</td>
+            <td>
+                {% for error in form.errors.git_hub_link %}
+                <span style="color: red;">[{{error}}]</span>
+                <br>{% endfor %}
+            </td>
 
-	        </tr>
-	            <td>Demo Link:</td>
-	            <td>{{form.demo_link}}</td>
-				<td>
-					{% for error in form.errors.demo_link %}
-						<span style="color: red;">[{{error}}]</span><br>
-					{% endfor %}
-				</td>
+        </tr>
+        <td>Demo Link:</td>
+        <td>{{form.demo_link}}</td>
+        <td>
+            {% for error in form.errors.demo_link %}
+            <span style="color: red;">[{{error}}]</span>
+            <br>{% endfor %}
+        </td>
 
-	        </tr> 
-	        </tr>
-	            <td>Screenshot</td>
-	            <td>{{form.screen_shot}}</td>
-				<td>
-					{% for error in form.errors.screen_shot %}
-						<span style="color: red;">[{{error}}]</span><br>
-					{% endfor %}
-				</td>
+        </tr>
+        </tr>
+        <td>Screenshot</td>
+        <td>{{form.screen_shot}}</td>
+        <td>
+            {% for error in form.errors.screen_shot %}
+            <span style="color: red;">[{{error}}]</span>
+            <br>{% endfor %}
+        </td>
 
-	        </tr>
-			<tr>
-				<td></td>
-				<td>
-					<input type="submit" value="Add project!">
-				</td>
-				<td></td>
-			</tr>
-		</table>
-	</form>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add project!">
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</form>
 {% endblock %}

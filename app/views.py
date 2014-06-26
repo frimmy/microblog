@@ -131,6 +131,42 @@ def portfolio(nickname):
                            form=form,
                            projects=user.projects)
 
+@app.route('/user/<nickname>/portfolio/edit', methods=['GET', 'POST'])
+@login_required
+def edit_portfolio(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user == None:
+        flash('User ' + nickname + ' not found')
+        return redirect(url_for('index'))
+
+    # Flashes a message if user doesn't have projects
+    elif len(user.projects.all()) < 1:
+        flash('Yo ' + nickname + '! You don\'t have any projects to edit!')
+
+    form = ProjectsForm()
+
+    if form.validate_on_submit():
+
+        filename = secure_filename(form.screen_shot.data.filename)
+        form.screen_shot.data.save(os.path.join(app.static_folder, filename))
+
+        project = Project(
+            title=form.title.data,
+            description=form.description.data,
+            git_hub_link=form.git_hub_link.data,
+            demo_link=form.demo_link.data,
+            screen_shot=filename,
+            author=g.user)
+
+        db.session.add(project)
+        db.session.commit()
+        flash('Your project has been added.')
+        return redirect(url_for('portfolio', nickname=g.user.nickname))
+
+    return render_template('edit_portfolio.html',
+                           user=user,
+                           form=form,
+                           projects=user.projects)
 
 # view for logging out
 @app.route('/logout')
